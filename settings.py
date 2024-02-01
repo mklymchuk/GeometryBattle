@@ -23,4 +23,6 @@ class Settings:
         self.sword_width = 5
         self.sword_height = 40
         self.sword_color = (0,0,0)
+        self.sword_swing_speed = 0.10
+        self.sword_rotation_speed = 0.10
         
