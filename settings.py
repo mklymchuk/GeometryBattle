@@ -12,17 +12,18 @@ class Settings:
         self.player_height = 50
         self.player_color = (0,0,0)
         self.player_speed = 1.00
+        self.player_health = 100
         
         # Enemy settings
         self.enemy_width = 25
         self.enemy_height = 25
         self.enemy_color = (255,0,0)
         self.enemy_speed = 0.50
+        self.enemy_health = 10
         
-        # Sword settings
-        self.sword_width = 5
-        self.sword_height = 40
-        self.sword_color = (0,0,0)
-        self.sword_swing_speed = 0.10
-        self.sword_rotation_speed = 0.10
+        # Circle attack settings
+        self.circle_attack_width = 100
+        self.circle_attack_height = 100
+        self.circle_attack_color = (0,0,255)
+        self.circle_atack_damage = 1
         
