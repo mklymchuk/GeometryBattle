@@ -23,6 +23,28 @@ class Enemy(Sprite):
         self.x = float(self.enemy_rect.x)
         self.y = float(self.enemy_rect.y)
         
+        self.player = gb_game.player
+
+    def update(self):
+        """Update the enemy's position to move towards the player."""
+        # Calculate the direction vector from the enemy to the player.
+        dx = self.player.rect.x - self.x
+        dy = self.player.rect.y - self.y
+
+        # Normalize the direction vector.
+        magnitude = (dx**2 + dy**2)**0.5
+        if magnitude > 0:
+            dx /= magnitude
+            dy /= magnitude
+
+        # Move the enemy in the direction of the player.
+        self.x += dx * self.settings.enemy_speed
+        self.y += dy * self.settings.enemy_speed
+
+        # Update the enemy's rect position.
+        self.enemy_rect.x = self.x
+        self.enemy_rect.y = self.y
+
     def draw_enemy(self):
         """Draw the enemy at its current location."""
         pygame.draw.rect(
