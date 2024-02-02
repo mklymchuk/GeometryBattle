@@ -20,19 +20,25 @@ class GeometryBattleGame:
         pygame.display.set_caption("Geometry Battle Game")
         
         self.player = Player(self)
+        self.enemies = pygame.sprite.Group()
         self.enemy = Enemy(self)
+        self.enemies.add(self.enemy)
         self.player_circle_attack = PlayerCircleAttack(self, self.player)
+        
+        self.clock = pygame.time.Clock()
 
     def run_game(self):
         """Start the main loop for the game."""
         while True:
             self._check_events()
             self.player.update()
-            self.enemy.update()
+            self.enemies.update()
             self.player_circle_attack.update()
             self._check_collision_enemy_circle_attack()
             self._check_collision_player_enemy()
             self._update_screen()
+            
+            self.clock.tick(60)
             
     def _check_events(self):
         """Respond to keypresses and mouse events."""
@@ -70,26 +76,29 @@ class GeometryBattleGame:
             
     def _check_collision_player_enemy(self):
         """Check for collisions between the player and the enemy."""
-        if self.player.rect.colliderect(self.enemy.rect):
-            self.settings.player_health -= 1
-            self.enemy.rect.x = 0
-            self.enemy.rect.y = 0
-            print(self.settings.player_health)
-            if self.settings.player_health <= 0:
-                print("You died!")
+        for enemy in self.enemies:
+            if self.player.rect.colliderect(enemy.rect):
+                self.settings.player_health -= 1
+                enemy.rect.x = 0
+                enemy.rect.y = 0
+                print(self.settings.player_health)
+                if self.settings.player_health <= 0:
+                    print("You died!")
                 
     def _check_collision_enemy_circle_attack(self):
         """Check for collisions between the enemy and the circle attack."""
-        dx = self.player_circle_attack.center[0] - self.enemy.rect.centerx
-        dy = self.player_circle_attack.center[1] - self.enemy.rect.centery
-        distance = (dx**2 + dy**2)**0.5
+        for enemy in self.enemies:
+            dx = self.player_circle_attack.center[0] - enemy.rect.centerx
+            dy = self.player_circle_attack.center[1] - enemy.rect.centery
+            distance = (dx**2 + dy**2)**0.5
 
-        if distance < self.player_circle_attack.radius:
-            self.settings.enemy_health -= 1
-            print(self.settings.enemy_health)
-            if self.settings.enemy_health <= 0:
-                print("Enemy died!")
-            
+            if distance < self.player_circle_attack.radius:
+                self.settings.enemy_health -= 1
+                print(self.settings.enemy_health)
+                if self.settings.enemy_health <= 0:
+                    enemy.reset_enemy()
+                    self.settings.enemy_health = self.settings.initial_enemy_health
+                    
     def _terminate_game(self):
         """Terminate the game."""
         pygame.time.delay(500)
@@ -101,7 +110,7 @@ class GeometryBattleGame:
         # Redraw the screen during each pass through the loop.
         self.screen.fill(self.settings.bg_color)
         self.player.blitme()
-        self.enemy.draw_enemy()
+        self.enemies.draw(self.screen)
         self.player_circle_attack.draw()
         
         # Make the most recently drawn screen visible.

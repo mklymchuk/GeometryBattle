@@ -11,15 +11,16 @@ class Settings:
         self.player_width = 50
         self.player_height = 50
         self.player_color = (0,0,0)
-        self.player_speed = 1.00
+        self.player_speed = 2.00
         self.player_health = 100
         
         # Enemy settings
         self.enemy_width = 25
         self.enemy_height = 25
         self.enemy_color = (255,0,0)
-        self.enemy_speed = 0.50
+        self.enemy_speed = 1.00
         self.enemy_health = 10
+        self.initial_enemy_health = 10
         
         # Circle attack settings
         self.circle_attack_width = 100

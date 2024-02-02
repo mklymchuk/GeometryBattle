@@ -11,13 +11,15 @@ class Enemy(Sprite):
         self.settings = gb_game.settings
         self.screen_rect = gb_game.screen.get_rect()
         
-        self.rect = pygame.Rect(
-            0, 0, self.settings.enemy_width, self.settings.enemy_height
-            )
+        self.image = pygame.Surface((self.settings.enemy_width, self.settings.enemy_height))
+        self.image.fill(self.settings.enemy_color)
         
-        # Start each new enemy at a random position at the top of the screen.
-        self.rect.x = randint(0, self.settings.screen_width)
-        self.rect.y = 0
+        # Set the initial position of the enemy rectangle.
+        self.rect = self.image.get_rect()
+        self.rect.x = randint(-100, self.settings.screen_width)
+        self.rect.y = randint(-100, self.settings.screen_height)
+        
+        self.reset_enemy()
         
         # Store a decimal value for the enemy's horizontal and vertical position.
         self.x = float(self.rect.x)
@@ -44,6 +46,13 @@ class Enemy(Sprite):
         # Update the enemy's rect position.
         self.rect.x = self.x
         self.rect.y = self.y
+        
+    def reset_enemy(self):
+        """Reset the enemy."""
+        self.rect.x = randint(-100, self.settings.screen_width)
+        self.rect.y = randint(-100, self.settings.screen_height)
+        self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
 
     def draw_enemy(self):
         """Draw the enemy at its current location."""
