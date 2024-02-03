@@ -2,6 +2,7 @@ import sys
 import pygame
 
 from settings import Settings
+from playButton import PlayButton
 from player import Player
 from enemy import Enemy
 from playerCircleAttack import PlayerCircleAttack
@@ -19,6 +20,7 @@ class GeometryBattleGame:
             )
         pygame.display.set_caption("Geometry Battle Game")
         
+        self.play_button = PlayButton(self, "Play")
         self.player = Player(self)
         self.enemies = pygame.sprite.Group()
         self.enemy = Enemy(self)
@@ -31,11 +33,12 @@ class GeometryBattleGame:
         """Start the main loop for the game."""
         while True:
             self._check_events()
-            self.player.update()
-            self.enemies.update()
-            self.player_circle_attack.update()
-            self._check_collision_enemy_circle_attack()
-            self._check_collision_player_enemy()
+            if self.settings.game_active:    
+                self.player.update()
+                self.enemies.update()
+                self.player_circle_attack.update()
+                self._check_collision_enemy_circle_attack()
+                self._check_collision_player_enemy()
             self._update_screen()
             
             self.clock.tick(60)
@@ -49,6 +52,9 @@ class GeometryBattleGame:
                 self._key_down_events(event)
             if event.type == pygame.KEYUP:
                 self._key_up_events(event)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._button_clicked(mouse_pos)
                     
     def _key_down_events(self, event):
         """A response to keypresses."""
@@ -73,6 +79,11 @@ class GeometryBattleGame:
             self.player.moving_up = False
         if event.key == pygame.K_DOWN:
             self.player.moving_down = False
+            
+    def _button_clicked(self, mouse_pos):
+        """Start a new game when the player clicks Play."""
+        if self.play_button.rect.collidepoint(mouse_pos):
+            self.settings.game_active = True
             
     def _check_collision_player_enemy(self):
         """Check for collisions between the player and the enemy."""
@@ -106,9 +117,11 @@ class GeometryBattleGame:
         """Update images on the screen, and flip to the new screen."""
         # Redraw the screen during each pass through the loop.
         self.screen.fill(self.settings.bg_color)
-        self.player.blitme()
-        self.enemies.draw(self.screen)
-        self.player_circle_attack.draw()
+        self.play_button.draw_button()
+        if self.settings.game_active:
+            self.player.blitme()
+            self.enemies.draw(self.screen)
+            self.player_circle_attack.draw()
         
         # Make the most recently drawn screen visible.
         pygame.display.flip()

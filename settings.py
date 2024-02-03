@@ -27,4 +27,7 @@ class Settings:
         self.circle_attack_height = 100
         self.circle_attack_color = (0,0,255)
         self.circle_atack_damage = 1
+
+        # Game active flag
+        self.game_active = False
         
