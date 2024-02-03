@@ -79,9 +79,6 @@ class GeometryBattleGame:
         for enemy in self.enemies:
             if self.player.rect.colliderect(enemy.rect):
                 self.settings.player_health -= 1
-                enemy.rect.x = 0
-                enemy.rect.y = 0
-                print(self.settings.player_health)
                 if self.settings.player_health <= 0:
                     print("You died!")
                 

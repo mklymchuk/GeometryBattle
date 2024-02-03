@@ -19,7 +19,9 @@ class Enemy(Sprite):
         self.rect.x = randint(-100, self.settings.screen_width)
         self.rect.y = randint(-100, self.settings.screen_height)
         
-        self.reset_enemy()
+        # Start each new enemy at a random position at the top of the screen.
+        self.rect.x = randint(-100, self.settings.screen_width)
+        self.rect.y = randint(-100, self.settings.screen_height)
         
         # Store a decimal value for the enemy's horizontal and vertical position.
         self.x = float(self.rect.x)
