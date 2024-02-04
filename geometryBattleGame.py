@@ -4,6 +4,7 @@ import pygame
 from settings import Settings
 from playButton import PlayButton
 from player import Player
+from playerHealthBar import PlayerHealthBar
 from enemy import Enemy
 from playerCircleAttack import PlayerCircleAttack
 
@@ -22,6 +23,7 @@ class GeometryBattleGame:
         
         self.play_button = PlayButton(self, "Play")
         self.player = Player(self)
+        self.player_health_bar = PlayerHealthBar(self)
         self.enemies = pygame.sprite.Group()
         self.enemy = Enemy(self)
         self.enemies.add(self.enemy)
@@ -52,7 +54,7 @@ class GeometryBattleGame:
                 self._key_down_events(event)
             if event.type == pygame.KEYUP:
                 self._key_up_events(event)
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and self.play_button.visible:
                 mouse_pos = pygame.mouse.get_pos()
                 self._button_clicked(mouse_pos)
                     
@@ -84,6 +86,7 @@ class GeometryBattleGame:
         """Start a new game when the player clicks Play."""
         if self.play_button.rect.collidepoint(mouse_pos):
             self.settings.game_active = True
+            self.play_button.visible = False
             
     def _check_collision_player_enemy(self):
         """Check for collisions between the player and the enemy."""
@@ -120,6 +123,7 @@ class GeometryBattleGame:
         self.play_button.draw_button()
         if self.settings.game_active:
             self.player.blitme()
+            self.player_health_bar.draw_health_bar()
             self.enemies.draw(self.screen)
             self.player_circle_attack.draw()
         
