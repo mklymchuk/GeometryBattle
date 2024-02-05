@@ -109,7 +109,7 @@ class GeometryBattleGame:
                 if self.settings.enemy_health <= 0:
                     enemy.reset_enemy()
                     self.settings.enemy_health = self.settings.initial_enemy_health
-                    
+                         
     def _terminate_game(self):
         """Terminate the game."""
         pygame.time.delay(500)

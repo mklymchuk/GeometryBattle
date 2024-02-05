@@ -13,6 +13,7 @@ class Settings:
         self.player_color = (0,0,0)
         self.player_speed = 2.00
         self.player_health = 100
+        self.max_player_health = 100
         
         # Enemy settings
         self.enemy_width = 25

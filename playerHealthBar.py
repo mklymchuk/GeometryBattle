@@ -33,6 +33,17 @@ class PlayerHealthBar:
     def draw_health_bar(self):
         """Draw the health bar."""
         if self.visible:
-            self.screen.fill(self.outline_color, self.rect)
-            self.screen.fill(self.bar_color, self.rect) 
+            # Calculate the width of the health bar based on the player's health
+            health_bar_width = self.width * (self.settings.player_health / self.settings.max_player_health)
+
+            # Draw the outline of the health bar
+            pygame.draw.rect(self.screen, self.outline_color, self.rect)
+
+            # Draw the health bar
+            pygame.draw.rect(self.screen, self.bar_color, (self.rect.x, self.rect.y, health_bar_width, self.height))
+
+            # Prepare the health text
             self._prep_health()
+
+            # Draw the health text
+            self.screen.blit(self.health_image, self.health_image_rect)
