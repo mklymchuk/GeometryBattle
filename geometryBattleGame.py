@@ -5,6 +5,7 @@ from settings import Settings
 from playButton import PlayButton
 from player import Player
 from playerHealthBar import PlayerHealthBar
+from audio import Audio
 from enemy import Enemy
 from playerCircleAttack import PlayerCircleAttack
 
@@ -24,6 +25,7 @@ class GeometryBattleGame:
         self.play_button = PlayButton(self, "Play")
         self.player = Player(self)
         self.player_health_bar = PlayerHealthBar(self)
+        self.audio = Audio()
         self.enemies = pygame.sprite.Group()
         self.enemy = Enemy(self)
         self.enemies.add(self.enemy)
@@ -35,7 +37,9 @@ class GeometryBattleGame:
         """Start the main loop for the game."""
         while True:
             self._check_events()
+            self.audio.play_background_music()
             if self.settings.game_active:    
+                self.audio.stop_background_music()
                 self.player.update()
                 self.enemies.update()
                 self.player_circle_attack.update()
@@ -93,6 +97,7 @@ class GeometryBattleGame:
         for enemy in self.enemies:
             if self.player.rect.colliderect(enemy.rect):
                 self.settings.player_health -= 1
+                self.audio.player_damaged_sound()
                 if self.settings.player_health <= 0:
                     print("You died!")
                 
@@ -105,6 +110,7 @@ class GeometryBattleGame:
 
             if distance < self.player_circle_attack.radius:
                 self.settings.enemy_health -= 1
+                self.audio.player_circle_attack_sound()
                 print(self.settings.enemy_health)
                 if self.settings.enemy_health <= 0:
                     enemy.reset_enemy()
