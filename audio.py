@@ -8,10 +8,8 @@ class Audio:
         
     def play_background_music(self):
         """Play the background music."""
-        self.background_music = mixer.music.load('source/audio/bg_music.wav')
-        self.background_music = mixer.music.play(-1)
-        self.background_music_volume = 0.5
-        mixer.music.set_volume(self.background_music_volume)
+        mixer.music.load('source/audio/bg_music.wav')
+        mixer.music.play(-1)
         
     def stop_background_music(self):
         """Stop the background music."""

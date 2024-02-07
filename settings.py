@@ -12,8 +12,8 @@ class Settings:
         self.player_height = 50
         self.player_color = (0,0,0)
         self.player_speed = 2.00
-        self.player_health = 100
-        self.max_player_health = 100
+        self.player_health = 10
+        self.max_player_health = 10
         
         # Enemy settings
         self.enemy_width = 25

@@ -8,6 +8,7 @@ from playerHealthBar import PlayerHealthBar
 from audio import Audio
 from enemy import Enemy
 from playerCircleAttack import PlayerCircleAttack
+from gameOver import GameOver
 
 class GeometryBattleGame:
     """Main class for the Geometry Battle game."""
@@ -30,15 +31,17 @@ class GeometryBattleGame:
         self.enemy = Enemy(self)
         self.enemies.add(self.enemy)
         self.player_circle_attack = PlayerCircleAttack(self, self.player)
+        self.game_over = GameOver(self)
         
         self.clock = pygame.time.Clock()
 
     def run_game(self):
         """Start the main loop for the game."""
+        self.audio.play_background_music()
+        
         while True:
             self._check_events()
-            self.audio.play_background_music()
-            if self.settings.game_active:    
+            if self.settings.game_active:
                 self.audio.stop_background_music()
                 self.player.update()
                 self.enemies.update()
@@ -99,7 +102,7 @@ class GeometryBattleGame:
                 self.settings.player_health -= 1
                 self.audio.player_damaged_sound()
                 if self.settings.player_health <= 0:
-                    print("You died!")
+                    self._reset_game()
                 
     def _check_collision_enemy_circle_attack(self):
         """Check for collisions between the enemy and the circle attack."""
@@ -115,6 +118,17 @@ class GeometryBattleGame:
                 if self.settings.enemy_health <= 0:
                     enemy.reset_enemy()
                     self.settings.enemy_health = self.settings.initial_enemy_health
+                    
+    def _reset_game(self):
+        """Reset the game."""
+        self.settings.game_active = False
+        self.settings.player_health = self.settings.max_player_health
+        self.play_button.visible = True
+        self.enemies.empty()
+        self.enemy = Enemy(self)
+        self.enemies.add(self.enemy)
+        self.player_circle_attack.circle_repeat_attack()
+        self.audio.play_background_music()
                          
     def _terminate_game(self):
         """Terminate the game."""
@@ -132,6 +146,8 @@ class GeometryBattleGame:
             self.player_health_bar.draw_health_bar()
             self.enemies.draw(self.screen)
             self.player_circle_attack.draw()
+        elif self.settings.player_health <= 0:
+            self.game_over.draw_game_over()
         
         # Make the most recently drawn screen visible.
         pygame.display.flip()
